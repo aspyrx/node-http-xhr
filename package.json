@@ -1,0 +1,50 @@
+{
+  "name": "node-http-xhr",
+  "version": "1.0.0",
+  "description": "Node.js XMLHttpRequest implementation using http.request()",
+  "main": "lib/index.js",
+  "files": [
+    "lib/index.js"
+  ],
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "doc": "jsdoc -c .jsdoc.json README.md lib",
+    "lint": "eslint-godaddy-es5 lib test",
+    "pretest": "npm run lint",
+    "test": "mocha test/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aspyrx/node-http-xhr.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aspyrx/node-http-xhr/issues"
+  },
+  "homepage": "https://github.com/aspyrx/node-http-xhr#readme",
+  "keywords": [
+    "node",
+    "nodejs",
+    "http",
+    "https",
+    "xhr",
+    "xmlhttprequest",
+    "http.request",
+    "https.request",
+    "request"
+  ],
+  "author": "Stan Zhang <stan.zhang2@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "assume": "^1.5.1",
+    "eslint": "^3.19.0",
+    "eslint-config-godaddy-es5": "^1.0.0",
+    "eslint-plugin-json": "^1.2.0",
+    "eslint-plugin-mocha": "^4.9.0",
+    "jsdoc": "^3.4",
+    "mocha": "^3.4",
+    "nock": "^9.0.13"
+  }
+}
