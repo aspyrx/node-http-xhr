@@ -1,6 +1,6 @@
 {
   "name": "node-http-xhr",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Node.js XMLHttpRequest implementation using http.request()",
   "main": "lib/index.js",
   "browser": "lib/browser.js",
