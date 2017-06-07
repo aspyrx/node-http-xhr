@@ -44,6 +44,12 @@ req.open('GET', 'https://github.com/aspyrx', true);
 req.send();
 ```
 
+### Note about browser environments
+
+If you use a bundler like `browserify` or `webpack` that follows the `browser`
+field in `package.json`, the module will simply export `window.XMLHttpRequest`.
+This is provided for sake of compatibility.
+
 ## Development
 
 ### Documentation
