@@ -3,6 +3,7 @@
   "version": "1.1.0",
   "description": "Node.js XMLHttpRequest implementation using http.request()",
   "main": "lib/index.js",
+  "browser": "lib/browser.js",
   "files": [
     "lib/index.js"
   ],
@@ -14,7 +15,7 @@
     "doc": "jsdoc -c .jsdoc.json README.md lib",
     "lint": "eslint-godaddy-es5 lib test",
     "pretest": "npm run lint",
-    "test": "mocha test/*.test.js"
+    "test": "mocha test/**/*.test.js"
   },
   "repository": {
     "type": "git",
