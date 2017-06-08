@@ -1,8 +1,12 @@
 # `node-http-xhr`
 
+[![Build Status][build-status]][travis]
+
 An implementation of [`XMLHttpRequest`][mdn-xhr] for [`node.js`][nodejs] using
 the [`http.request`][nodejs-http] API.
 
+[build-status]: https://travis-ci.org/aspyrx/node-http-xhr.svg?branch=master
+[travis]: https://travis-ci.org/aspyrx/node-http-xhr
 [mdn-xhr]: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
 [nodejs]: https://nodejs.org
 [nodejs-http]: https://nodejs.org/dist/latest/docs/api/http.html
