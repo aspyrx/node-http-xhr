@@ -1,3 +1,12 @@
+# 1.3.0
+
+- Added `withCredentials` instance property to more closely match XHR API.
+- Added more unit tests for `EventTarget` API and instance properties.
+
+# 1.2.1
+
+- Fixed browser files not being included in package.
+
 # 1.2.0
 
 - Added support for browser environments.
