@@ -48,6 +48,22 @@ describe('XMLHttpRequest', function () {
     });
   });
 
+  describe('#withCredentials', function () {
+    var req;
+
+    beforeEach(function () {
+      req = new XMLHttpRequest();
+    });
+
+    it('defaults to false', function () {
+      assume(req.withCredentials).is.false();
+    });
+
+    it('is writable', function () {
+      req.withCredentials = true;
+    });
+  });
+
   after(function () {
     nock.enableNetConnect();
   });
