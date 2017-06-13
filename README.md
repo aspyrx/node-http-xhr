@@ -78,4 +78,7 @@ Currently, some features are lacking:
 - Some ProgressAPI events (`loadstart`, `loadend`, `progress`)
 - `responseType` values other than `''` or `'text'` and corresponding parsing
   - As a result of the above, `overrideMimeType()` isn't very useful
+- `setRequestHeader()` doesn't check for forbidden headers.
+- `withCredentials` is defined as an instance property, but doesn't do anything
+  since there's no use case for CORS-like requests in `node.js` right now.
 
