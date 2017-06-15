@@ -12,9 +12,10 @@
     "test": "test"
   },
   "scripts": {
-    "doc": "jsdoc -c .jsdoc.json README.md lib",
+    "doc": "jsdoc -c .jsdoc.json README.md lib test",
     "lint": "eslint-godaddy-es5 lib test",
-    "test": "mocha test/**/*.test.js"
+    "test": "mocha test/**/*.test.js",
+    "cover": "istanbul cover _mocha -- test/**/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -39,12 +40,15 @@
   "license": "ISC",
   "devDependencies": {
     "assume": "^1.5.1",
+    "assume-sinon": "^1.0.0",
     "eslint": "^3.19.0",
     "eslint-config-godaddy-es5": "^1.0.0",
     "eslint-plugin-json": "^1.2.0",
     "eslint-plugin-mocha": "^4.9.0",
+    "istanbul": "^0.4.5",
     "jsdoc": "^3.4",
     "mocha": "^3.4",
-    "nock": "^9.0.13"
+    "nock": "^9.0.13",
+    "sinon": "^2.3.4"
   }
 }
