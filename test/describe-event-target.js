@@ -19,7 +19,7 @@ assume.use(assumeSinon);
  * @param {String} type - The event type.
  */
 function describeEventType(Class, type) {
-  describe('`' + type + '` events', function () {
+  describe('`' + type + '` event', function () {
     var dispatches;
     var instance;
     var handlerProp = 'on' + type;
