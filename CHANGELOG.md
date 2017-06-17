@@ -1,3 +1,9 @@
+# 1.3.2
+
+- Fix timeouts
+- Header names should be case-insensitive
+- Add more tests
+
 # 1.3.1
 
 - `on${event}` properties correctly update handler
