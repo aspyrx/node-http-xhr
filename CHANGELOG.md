@@ -1,3 +1,9 @@
+# 1.3.3
+
+- Refactor `EventTarget` and `XMLHttpRequestEventTarget` into their own classes
+- Fix https bug
+- Add more tests
+
 # 1.3.2
 
 - Fix timeouts
