@@ -1,5 +1,7 @@
 /* eslint max-nested-callbacks: ['error', 5] */
 
+/** @module test/index */
+
 'use strict';
 
 var XMLHttpRequest = require('..');
@@ -106,7 +108,7 @@ function describeXHREvents() {
         });
 
         // Remove mocha's process-level error handler and install our spy
-        assume(process.listenerCount('uncaughtException')).equals(1);
+        assume(process.listeners('uncaughtException').length).equals(1);
         originalHandler = process.listeners('uncaughtException')[0];
         process.removeListener('uncaughtException', originalHandler);
         process.once('uncaughtException', spy);
@@ -162,8 +164,6 @@ function describeXHREvents() {
 
 /**
  * Describes XMLHttpRequest properties.
- *
- * @private
  */
 function describeXHRProps() {
   describe('read-only properties', function () {

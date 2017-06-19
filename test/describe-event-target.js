@@ -1,8 +1,6 @@
 'use strict';
 
-/**
- * @module test/describe-event-target
- */
+/** @module test/describe-event-target */
 
 var assume = require('assume');
 var sinon = require('sinon');
@@ -194,7 +192,7 @@ function describeEventType(Class, type) {
  * @param {Function} Class - The class to test.
  * @param {String[]} events - The names of the events to test.
  */
-module.exports = function describeEventTarget(Class, events) {
+module.exports = function (Class, events) {
   describe('EventTarget interface', function () {
     events.forEach(function (type) {
       describeEventType(Class, type);
