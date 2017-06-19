@@ -1,4 +1,7 @@
 {
-  "extends": "godaddy-es5"
+  "extends": "godaddy-es5",
+  "rules": {
+    "require-jsdoc": "error"
+  }
 }
 
