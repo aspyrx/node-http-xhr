@@ -24,7 +24,7 @@ function describeXHREvents() {
   describe('events', function () {
     describe('`readystatechange` event', function () {
       it('is fired whenever the ready state changes', function (done) {
-        var txtInterceptor = nock('http://example.com')
+        var txtScope = nock('http://example.com')
           .get('/test.txt')
           .reply(200, 'This is a test response.');
 
@@ -45,7 +45,7 @@ function describeXHREvents() {
           }
 
           assume(req.readyState).equals(req.DONE);
-          txtInterceptor.done();
+          txtScope.done();
           done();
         });
 
@@ -74,12 +74,12 @@ function describeXHREvents() {
     });
 
     describe('`error` event', function () {
-      var errInterceptor;
+      var errScope;
       var errMessage = 'Test error message';
       var errCode = 'TEST_ERROR';
 
       beforeEach(function () {
-        errInterceptor = nock('http://example.com')
+        errScope = nock('http://example.com')
           .get('/error')
           .replyWithError({ message: errMessage, code: errCode });
       });
@@ -87,7 +87,7 @@ function describeXHREvents() {
       it('is fired if the request encountered an error', function (done) {
         var spy = sinon.spy(function () {
           assume(spy).is.called(1);
-          errInterceptor.done();
+          errScope.done();
           done();
         });
 
@@ -103,7 +103,7 @@ function describeXHREvents() {
           assume(spy).is.called(1);
           assume(err.message).equals(errMessage);
           assume(err.code).equals(errCode);
-          errInterceptor.done();
+          errScope.done();
           done();
         });
 
@@ -120,14 +120,14 @@ function describeXHREvents() {
 
     describe('`timeout` event', function () {
       it('is fired if the request timed out', function (done) {
-        var timeoutInterceptor = nock('http://example.com')
+        var timeoutScope = nock('http://example.com')
           .get('/timeout')
           .socketDelay(1000)
           .reply(204);
 
         var spy = sinon.spy(function () {
           assume(spy).is.called(1);
-          timeoutInterceptor.done();
+          timeoutScope.done();
           done();
         });
 
@@ -141,7 +141,7 @@ function describeXHREvents() {
     describe('`load` event', function () {
       it('is fired once the request loads', function (done) {
         var txtResponse = 'This is a test response.';
-        var txtInterceptor = nock('http://example.com')
+        var txtScope = nock('http://example.com')
           .get('/test.txt')
           .reply(200, txtResponse);
 
@@ -149,7 +149,7 @@ function describeXHREvents() {
           assume(spy).is.called(1);
           assume(req.readyState).equals(req.DONE);
           assume(req.responseText).equals(txtResponse);
-          txtInterceptor.done();
+          txtScope.done();
           done();
         });
 
@@ -264,7 +264,7 @@ function describeXHRProps() {
 
       it('changes to `DONE` once response is fully loaded', function (done) {
         var txtResponse = 'This is a test response.';
-        var txtInterceptor = nock('http://example.com')
+        var txtScope = nock('http://example.com')
           .get('/test.txt')
           .reply(200, txtResponse);
 
@@ -287,7 +287,7 @@ function describeXHRProps() {
           assume(req.readyState).equals(req.DONE);
           assume(txtResponse).equals(req.responseText);
 
-          txtInterceptor.done();
+          txtScope.done();
           done();
         });
 
@@ -297,11 +297,11 @@ function describeXHRProps() {
     });
 
     describe('#status', function () {
-      var txtInterceptor;
+      var emptyScope;
 
       beforeEach(function () {
-        txtInterceptor = nock('http://example.com')
-          .get('/test.txt')
+        emptyScope = nock('http://example.com')
+          .get('/empty')
           .reply(204);
       });
 
@@ -312,14 +312,14 @@ function describeXHRProps() {
             assume(req.status).equals(0);
           }
           if (req.readyState === req.DONE) {
-            txtInterceptor.done();
+            emptyScope.done();
             done();
             return;
           }
         });
 
         req.onreadystatechange = spy;
-        req.open('GET', 'http://example.com/test.txt');
+        req.open('GET', 'http://example.com/empty');
         req.send();
       });
 
@@ -330,13 +330,128 @@ function describeXHRProps() {
             assume(req.status).equals(204);
           }
           if (req.readyState === req.DONE) {
-            txtInterceptor.done();
+            emptyScope.done();
             done();
             return;
           }
         });
 
         req.onreadystatechange = spy;
+        req.open('GET', 'http://example.com/empty');
+        req.send();
+      });
+    });
+
+    describe('#statusText', function () {
+      it('is initially `\'\'`', function () {
+        assume(req.statusText).equals('');
+      });
+
+      xit('contains status text once headers are received', function (done) {
+        var emptyScope = nock('http://example.com')
+          .get('/empty')
+          .reply(204);
+
+        var spy = sinon.spy(function () {
+          assume(spy.callCount).is.at.most(2);
+          if (req.readyState >= req.HEADERS_RECEIVED) {
+            // TODO: nock doesn't let us specify the response status text
+            // for now, use `null` because that's what `http.IncomingMessage`
+            // uses for `#statusMessage` if the response doesn't have one
+            assume(req.statusText).equals(null);
+            emptyScope.done();
+            done();
+            return;
+          }
+        });
+
+        req.onreadystatechange = spy;
+        req.open('GET', 'http://example.com/empty');
+      });
+    });
+
+    describe('#timeout', function () {
+      var timeout = 50;
+      var timeoutScope;
+
+      beforeEach(function () {
+        timeoutScope = nock('http://example.com')
+          .get('/timeout')
+          .socketDelay(5000)
+          .reply(204);
+      });
+
+      it('is initially 0', function () {
+        assume(req.timeout).equals(0);
+      });
+
+      it('times out the request if exceeded', function (done) {
+        var spy = sinon.spy(function () {
+          assume(spy).is.called(1);
+          timeoutScope.done();
+          done();
+        });
+
+        req.ontimeout = spy;
+        req.timeout = timeout;
+        req.open('GET', 'http://example.com/timeout');
+        req.send();
+      });
+
+      it('times out even if set after request is sent', function (done) {
+        var spy = sinon.spy(function () {
+          assume(spy).is.called(1);
+          timeoutScope.done();
+          done();
+        });
+
+        req.ontimeout = spy;
+        req.open('GET', 'http://example.com/timeout');
+        req.send();
+        req.timeout = timeout;
+      });
+    });
+
+    describe('#responseType', function () {
+      it('intially is `\'\'`', function () {
+        assume(req.responseType).equals('');
+      });
+
+      it('silently fails to write if new value is unsupported', function () {
+        req.responseType = null;
+        assume(req.responseType).equals('');
+      });
+
+      it('allows supported values to be written', function () {
+        req.responseType = 'text';
+        assume(req.responseType).equals('text');
+        req.responseType = '';
+        assume(req.responseType).equals('');
+      });
+    });
+
+    describe('#response', function () {
+      var txtResponse = 'This is a test response.';
+      var txtScope;
+      beforeEach(function () {
+        txtScope = nock('http://example.com')
+          .get('/test.txt')
+          .reply(200, txtResponse);
+      });
+
+      it('initially is `null`', function () {
+        assume(req.response).equals(null);
+      });
+
+      it('supports `responseType = \'text\'`', function (done) {
+        var spy = sinon.spy(function () {
+          assume(spy).is.called(1);
+          assume(req.response).equals(txtResponse);
+          txtScope.done();
+          done();
+        });
+
+        req.onload = spy;
         req.open('GET', 'http://example.com/test.txt');
         req.send();
       });
@@ -379,7 +494,7 @@ describe('XMLHttpRequest', function () {
     ['http:', 'https:'].forEach(function (protocol) {
       it('works with protocol `' + protocol + '`', function (done) {
         var txtResponse = 'This is a test response.';
-        var txtInterceptor = nock(protocol + '//example.com')
+        var txtScope = nock(protocol + '//example.com')
           .get('/test.txt')
           .reply(200, txtResponse);
 
@@ -391,7 +506,7 @@ describe('XMLHttpRequest', function () {
           assume(req.response).equals(txtResponse);
           assume(req.responseText).equals(txtResponse);
           assume(req.status).equals(200);
-          txtInterceptor.done();
+          txtScope.done();
           done();
         });
 
