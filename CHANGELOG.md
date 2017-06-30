@@ -1,3 +1,9 @@
+# 1.3.4
+
+- On timeout, `readyState` is set to `DONE`
+- Writing an unsupported value to `responseType` now fails silently
+- Add more tests
+
 # 1.3.3
 
 - Refactor `EventTarget` and `XMLHttpRequestEventTarget` into their own classes
