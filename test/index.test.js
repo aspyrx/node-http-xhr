@@ -413,6 +413,31 @@ function describeXHRProps() {
     });
 
     describe('#responseType', function () {
+
+      it('supports binary data (arraybuffer responseType)', function (done) {
+
+        var responseData = new Buffer(909);
+
+        var binaryScope = nock('http://example.com')
+          .get('/music.mp3')
+          .reply(200, responseData, {
+            'Content-Type': 'audio/mpeg'
+          });
+
+        req.responseType = 'arraybuffer';
+        req.open('GET', 'http://example.com/music.mp3');
+        req.send();
+
+        req.onload = function () {
+
+          assume(req.responseType).equals('arraybuffer');
+          assume(req.response).equals(responseData.buffer);
+
+          binaryScope.done();
+          done();
+        };
+      });
+
       it('intially is `\'\'`', function () {
         assume(req.responseType).equals('');
       });
